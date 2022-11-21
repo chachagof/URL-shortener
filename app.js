@@ -2,9 +2,8 @@ const express = require('express')
 const exphbs = require('express-handlebars')
 const mongoose = require('mongoose')
 const changeURL = require('./public/javascript/changeURL')
-const urlshortener = require('./models/urlshortener')
+const Urlshortener = require('./models/urlshortener')
 const app = express()
-
 const port = 3000
 
 if (process.env.NODE_ENV !== 'production') {
@@ -20,6 +19,7 @@ db.once('open', () => {
   console.log('mongodb is connecting')
 })
 
+app.use(express.urlencoded({ extended: true }))
 app.engine('handlebars', exphbs.engine({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 
@@ -30,15 +30,26 @@ app.get('/', (req, res) => {
 
 // url page
 app.post('/urlshortener', (req, res) => {
-  const url = req.query.urlshortener
+  const url = req.body.urlshortener
   const newUrl = changeURL(url)
-  urlshortener.create({ url: `${url}`, newURL: `${newUrl}` })
+  Urlshortener.create({ url: `${url}`, newURL: `${newUrl}` })
     .then(res.render('urlChange', { newUrl }))
     .catch(error => console.log(error))
 })
 
 // shortener page
-app.get('/')
+app.get('/gogo/:newUrl', (req, res) => {
+  const newUrl = req.params
+  Urlshortener.findOne(newUrl)
+    .then(data => {
+      if (!data) {
+        // 11/21繼續錯誤修改
+        return res.send('no')
+      }
+      return res.redirect(data.url)
+    })
+    .catch(error => console.log(error))
+})
 
 app.listen(port, () => {
   console.log('Gogogo!!')
