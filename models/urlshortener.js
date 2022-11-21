@@ -2,7 +2,11 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const newUrl = new Schema({
   url: {
-    type: string,
+    type: String,
+    required: true
+  },
+  newURL: {
+    type: String,
     required: true
   }
 })
