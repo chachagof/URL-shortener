@@ -43,8 +43,7 @@ app.get('/gogo/:newUrl', (req, res) => {
   Urlshortener.findOne(newUrl)
     .then(data => {
       if (!data) {
-        // 11/21繼續錯誤修改
-        return res.send('no')
+        return res.render('wrongPage', { newUrl })
       }
       return res.redirect(data.url)
     })

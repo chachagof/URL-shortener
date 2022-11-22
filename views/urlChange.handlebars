@@ -6,8 +6,18 @@
   </div>
   <div class="d-flex 
  justify-content-center">
-    <div class="btn btn-light w-50">
-      <a href="{{newUrl}}">{{newUrl}}</a>
+    <div class="btn btn-light w-25">
+      <a id="copyArea" href="{{newUrl}}">{{newUrl}}</a>
     </div>
+    <button type="button" onclick="copyUrl()" class="btn btn-primary">Copy</button>
   </div>
 </div>
+
+<script>
+  function copyUrl() {
+      const value = document.querySelector('#copyArea').innerHTML
+      navigator.clipboard.writeText(value).then(() => {
+        alert('copy successfully')
+      })
+    }
+</script>
