@@ -28,22 +28,34 @@ app.get('/', (req, res) => {
   res.render('index')
 })
 
-// url page
+// shorten URL
 app.post('/urlshortener', (req, res) => {
   const url = req.body.urlshortener
-  const newUrl = changeURL(url)
-  Urlshortener.create({ url: `${url}`, newURL: `${newUrl}` })
-    .then(res.render('urlChange', { newUrl }))
+  if (!url) {
+    return res.redirect('/')
+  }
+  Urlshortener.findOne({ "url": url })
+    .then(data => {
+      if (!data) {
+        const newUrl = changeURL(url)
+        Urlshortener.create({ url: `${url}`, newURL: `${newUrl}` })
+          .then(res.render('urlChange', { newUrl }))
+          .catch(error => console.log(error))
+      }
+      // 輸入相同網址時，產生一樣的縮址。
+      return res.render('urlChange', { newUrl: data.newURL })
+    })
     .catch(error => console.log(error))
 })
 
 // shortener page
-app.get('/gogo/:newUrl', (req, res) => {
-  const newUrl = req.params
-  Urlshortener.findOne(newUrl)
+app.get('/:newURL', (req, res) => {
+  const { newURL } = req.params
+  const newURL1 = req.params
+  Urlshortener.findOne({ newURL })
     .then(data => {
       if (!data) {
-        return res.render('wrongPage', { newUrl })
+        return res.render('wrongPage', { newURL })
       }
       return res.redirect(data.url)
     })
