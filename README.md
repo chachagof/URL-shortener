@@ -1,6 +1,9 @@
 # 短網址產生器
 可以將使用者所提供的網址轉換為較短網址的產生器
 
+![finish URL shortener](https://user-images.githubusercontent.com/116162205/203322975-114c4cd1-11ec-4380-a0e1-6d9fe15f4582.png)
+
+
 ## 功能
 * 輸入想縮短的網址並點擊create按鈕後會得到縮短後的網址
 * 已輸入過的網址會被記錄再次縮短時會得到相同的網址
